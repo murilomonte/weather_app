@@ -104,7 +104,10 @@ class _WeatherPageState extends State<WeatherPage> {
                 children: [
                   Text(
                     '${_weather?.temperature.round() ?? 'Loading temperature in '}°C',
-                    style: GoogleFonts.bebasNeue(fontSize: 50),
+                    style: GoogleFonts.bebasNeue(
+                      fontSize: 50,
+                      height: 1
+                    ),
                   ),
                   // Weather condition
                   Text(_weather?.mainCondition ?? ""),
