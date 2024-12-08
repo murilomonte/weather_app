@@ -3,6 +3,7 @@ import 'package:lottie/lottie.dart';
 import 'package:weather_app/service/weather_service.dart';
 import '../models/weather_model.dart';
 import 'dart:developer';
+import 'package:google_fonts/google_fonts.dart';
 
 class WeatherPage extends StatefulWidget {
   const WeatherPage({super.key});
@@ -33,7 +34,7 @@ class _WeatherPageState extends State<WeatherPage> {
     }
   }
 
-  // weather animations 
+  // weather animations
   String getWeatherAnimation(String? mainCondition) {
     if (mainCondition == null) return 'assets/lottie/sunny.json';
 
@@ -70,22 +71,47 @@ class _WeatherPageState extends State<WeatherPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            // City Name
-            Text(_weather?.cityName ?? "Loading city..."),
-        
-            // Animation
-            Lottie.asset(getWeatherAnimation(_weather?.mainCondition)),
-            
-            // Temperature
-            Text('${_weather?.temperature.round() ?? 'Loading temperature in '}°C'),
+      body: SafeArea(
+        minimum: EdgeInsets.all(80), // Padding
+        child: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              // City Name
+              Column(
+                children: [
+                  Icon(
+                    Icons.place,
+                    size: 20,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Text(
+                      _weather?.cityName ?? "Loading city...",
+                      style: GoogleFonts.bebasNeue(
+                        fontSize: 25,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
 
-            // Weather condition
-            Text(_weather?.mainCondition ?? ""),
-          ],
+              // Animation
+              Lottie.asset(getWeatherAnimation(_weather?.mainCondition)),
+
+              // Temperature
+              Column(
+                children: [
+                  Text(
+                    '${_weather?.temperature.round() ?? 'Loading temperature in '}°C',
+                    style: GoogleFonts.bebasNeue(fontSize: 50),
+                  ),
+                  // Weather condition
+                  Text(_weather?.mainCondition ?? ""),
+                ],
+              ),
+            ],
+          ),
         ),
       ),
     );
