@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:lottie/lottie.dart';
 import 'package:weather_app/service/weather_service.dart';
 import '../models/weather_model.dart';
+import 'dart:developer';
 
 class WeatherPage extends StatefulWidget {
   const WeatherPage({super.key});
@@ -11,7 +13,7 @@ class WeatherPage extends StatefulWidget {
 
 class _WeatherPageState extends State<WeatherPage> {
   // api key
-  final _weatherService = WeatherService('716f415c0a68a2ab4a0f4d6b3f133ac0');
+  final _weatherService = WeatherService('APIKEY');
   Weather? _weather;
 
   // fetch weather
@@ -23,16 +25,38 @@ class _WeatherPageState extends State<WeatherPage> {
     // get weather for the city
     try {
       final weather = await _weatherService.getWeather(cityName);
-      print(weather);
       setState(() {
         _weather = weather;
       });
     } catch (e) {
-      print('ERROOOO: $e');
+      log('$e');
     }
   }
 
   // weather animations 
+  String getWeatherAnimation(String? mainCondition) {
+    if (mainCondition == null) return 'assets/lottie/sunny.json';
+
+    switch (mainCondition.toLowerCase()) {
+      case 'clouds':
+      case 'mist':
+      case 'smoke':
+      case 'haze':
+      case 'dust':
+      case 'fog':
+        return 'assets/lottie/cloudy.json';
+      case 'rain':
+      case 'drizzle':
+      case 'shower rain':
+        return 'assets/lottie/rain.json';
+      case 'thunderstorm':
+        return 'assets/lottie/thunder.json';
+      case 'clear':
+        return 'assets/lottie/sunny.json';
+      default:
+        return 'assets/lottie/sunny.json';
+    }
+  }
 
   // init state
   @override
@@ -53,8 +77,14 @@ class _WeatherPageState extends State<WeatherPage> {
             // City Name
             Text(_weather?.cityName ?? "Loading city..."),
         
+            // Animation
+            Lottie.asset(getWeatherAnimation(_weather?.mainCondition)),
+            
             // Temperature
             Text('${_weather?.temperature.round() ?? 'Loading temperature in '}°C'),
+
+            // Weather condition
+            Text(_weather?.mainCondition ?? ""),
           ],
         ),
       ),
